@@ -1,0 +1,3 @@
+rootProject.name = 'chime'
+
+include ':app'

@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import { AppRegistry, Text, View} from 'react-native';
+///////////////
+//NAVIGATOR DEPRECATED
+//////////////////
 
-import Component1 from './components/Component1/Component1.js';
+import React, { Component } from "react";
+import { AppRegistry, Text, View, Navigator } from "react-native";
+
+import Component5 from "./components/Component5/Component5.js";
 
 export default class myapp extends Component {
   render() {
-    return (
-      <View>
-        <Component1 message="Welcome to Chime"/>
-      </View>
-    );
+    return <Component5 />;
   }
 }
 
-AppRegistry.registerComponent( 'myapp', () => myapp );
+AppRegistry.registerComponent("myapp", () => myapp);

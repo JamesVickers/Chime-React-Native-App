@@ -1,16 +1,64 @@
 import React, { Component } from 'react';
-import { AppRegistry, Text, View} from 'react-native';
+import { TouchableHighlight, View, Text } from 'react-native';
+import { createStackNavigator } from 'react-navigation';
 
-import Component1 from './components/Component1/Component1.js';
-
-export default class myapp extends Component {
+class HomeScreen extends Component {
   render() {
     return (
-      <View>
-        <Component1 message="Welcome to Chime"/>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Home Screen</Text>
+        <TouchableHighlight
+          title="Go to Details"
+          onPress={() => this.props.navigation.navigate('Details')}>
+          <View>
+            <Text>Go to details</Text>
+          </View>
+        </TouchableHighlight>
       </View>
     );
   }
 }
 
-AppRegistry.registerComponent( 'myapp', () => myapp );
+class DetailsScreen extends Component {
+  render() {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Details Screen</Text>
+        <TouchableHighlight
+          title="Go to Creators"
+          onPress={() => this.props.navigation.navigate('Creators')}>
+          <View>
+            <Text>Go to Creators</Text>
+          </View>
+        </TouchableHighlight>
+      </View>
+    );
+  }
+}
+
+class CreatorsScreen extends Component {
+  render() {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Creators Screen</Text>
+      </View>
+    );
+  }
+}
+
+const RootStack = createStackNavigator(
+  {
+  Home: HomeScreen,
+  Details: DetailsScreen,
+  Creators: CreatorsScreen,
+},
+{
+  initialRouteName: 'Home',
+}
+);
+
+export default class App extends Component {
+  render() {
+    return <RootStack />;
+  }
+}

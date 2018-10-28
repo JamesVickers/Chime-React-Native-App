@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { TouchableHighlight, View, Text } from 'react-native';
+import { TouchableHighlight, View, Text, StyleSheet } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
 class HomeScreen extends Component {
   render() {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={homeStyles.mainView}>
         <Text>Home Screen</Text>
         <TouchableHighlight
           title="Go to Details"
@@ -18,6 +18,18 @@ class HomeScreen extends Component {
     );
   }
 }
+
+
+const homeStyles = StyleSheet.create ({
+  mainView : {
+    backgroundColor: 'yellow',
+    flex: 1, 
+    alignItems: 
+    'center', 
+    justifyContent: 'center'
+  }
+});
+
 
 class DetailsScreen extends Component {
   render() {

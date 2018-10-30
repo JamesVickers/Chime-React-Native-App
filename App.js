@@ -1,35 +1,33 @@
 import React, { Component } from 'react';
-import { TouchableHighlight, View, Text, StyleSheet } from 'react-native';
+import { TouchableHighlight, View, Text, StyleSheet, ImageBackground } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
 class HomeScreen extends Component {
   render() {
     return (
-      <View style={homeStyles.mainView}>
+      <ImageBackground 
+        source={require('./assets/img/smoke.png')}
+        style={homeStyles.mainView}>
         <Text>Home Screen</Text>
-        <TouchableHighlight
+        <TouchableHighlight 
           title="Go to Details"
           onPress={() => this.props.navigation.navigate('Details')}>
           <View>
             <Text>Go to details</Text>
           </View>
         </TouchableHighlight>
-      </View>
+      </ImageBackground>
     );
   }
 }
 
-
 const homeStyles = StyleSheet.create ({
   mainView : {
-    backgroundColor: 'yellow',
     flex: 1, 
-    alignItems: 
-    'center', 
+    alignItems: 'center', 
     justifyContent: 'center'
   }
 });
-
 
 class DetailsScreen extends Component {
   render() {

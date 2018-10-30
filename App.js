@@ -7,13 +7,13 @@ class HomeScreen extends Component {
     return (
       <ImageBackground 
         source={require('./assets/img/smoke.png')}
-        style={homeStyles.mainView}>
-        <Text>Home Screen</Text>
+        style={mainStyles.mainView}>
+        <Text>Chime</Text>
         <TouchableHighlight 
-          title="Go to Details"
+          title="Enter"
           onPress={() => this.props.navigation.navigate('Details')}>
           <View>
-            <Text>Go to details</Text>
+            <Text>Enter</Text>
           </View>
         </TouchableHighlight>
       </ImageBackground>
@@ -21,46 +21,60 @@ class HomeScreen extends Component {
   }
 }
 
-const homeStyles = StyleSheet.create ({
+class welcomeScreen extends Component {
+  render() {
+    return (
+      <ImageBackground 
+        source={require('./assets/img/smoke.png')}
+        style={mainStyles.mainView}>
+        <View style={mainStyles.modalView}>
+          <Text>Welcome</Text>
+          <TouchableHighlight
+            title="Click here to begin..."
+            onPress={() => this.props.navigation.navigate('Creators')}>
+            <View>
+              <Text>Click here to begin...</Text>
+            </View>
+          </TouchableHighlight>
+        </View>
+      </ImageBackground>
+    );
+  }
+}
+
+class TimerScreen extends Component {
+  render() {
+    return (
+      <ImageBackground 
+        source={require('./assets/img/smoke.png')}
+        style={mainStyles.mainView}>
+        <Text>Timer Screen</Text>
+      </ImageBackground>
+    );
+  }
+}
+
+const mainStyles = StyleSheet.create ({
   mainView : {
     flex: 1, 
     alignItems: 'center', 
-    justifyContent: 'center'
+    justifyContent: 'space-around',
+  },
+  modalView: {
+    alignItems: 'center', 
+    justifyContent: 'space-around',
+    width: '85%',
+    height: '85%',
+    backgroundColor: 'rgba(160, 160, 160, 0.85)',
+    borderRadius: 5
   }
 });
-
-class DetailsScreen extends Component {
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Details Screen</Text>
-        <TouchableHighlight
-          title="Go to Creators"
-          onPress={() => this.props.navigation.navigate('Creators')}>
-          <View>
-            <Text>Go to Creators</Text>
-          </View>
-        </TouchableHighlight>
-      </View>
-    );
-  }
-}
-
-class CreatorsScreen extends Component {
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Creators Screen</Text>
-      </View>
-    );
-  }
-}
 
 const RootStack = createStackNavigator(
   {
   Home: HomeScreen,
-  Details: DetailsScreen,
-  Creators: CreatorsScreen,
+  Details: welcomeScreen,
+  Creators: TimerScreen,
 },
 {
   initialRouteName: 'Home',

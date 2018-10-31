@@ -7,8 +7,11 @@
     "test": "jest"
   },
   "dependencies": {
+    "expo": "^31.0.0",
     "react": "16.6.0-alpha.8af6728",
-    "react-native": "0.57.3"
+    "react-native": "0.57.3",
+    "react-native-sound": "^0.10.9",
+    "react-navigation": "^2.18.2"
   },
   "devDependencies": {
     "babel-jest": "23.6.0",

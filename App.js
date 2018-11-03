@@ -36,13 +36,13 @@ class HomeScreen extends Component {
         source={require("./assets/img/smoke.png")}
         style={mainStyles.mainView}
       >
-        <Text>Chime</Text>
+        <Text style={mainStyles.text}>Chime</Text>
         <TouchableHighlight
           title="Enter"
           onPress={() => this.props.navigation.navigate("Details")}
         >
           <View>
-            <Text>Enter</Text>
+            <Text style={mainStyles.text}>Enter</Text>
           </View>
         </TouchableHighlight>
       </ImageBackground>
@@ -58,13 +58,13 @@ class welcomeScreen extends Component {
         style={mainStyles.mainView}
       >
         <View style={mainStyles.modalView}>
-          <Text>Welcome</Text>
+          <Text style={mainStyles.text}>Welcome</Text>
           <TouchableHighlight
             title="Click here to begin..."
             onPress={() => this.props.navigation.navigate("TimerScreen")}
           >
             <View>
-              <Text>Click here to begin...</Text>
+              <Text style={mainStyles.text}>Click here to begin...</Text>
             </View>
           </TouchableHighlight>
         </View>
@@ -76,11 +76,16 @@ class welcomeScreen extends Component {
 class Clock extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { date: new Date() };
+    this.state = { 
+      startTime: new Date(),
+      startTime2: new Date(),
+      currentTime: new Date()
+    };
   }
 
   componentDidMount() {
     this.timerID = setInterval(() => this.tick(), 1000);
+    this.setEndTime();
   }
 
   componentWillUnmount() {
@@ -89,12 +94,29 @@ class Clock extends React.Component {
 
   tick() {
     this.setState({
-      date: new Date()
+      currentTime: new Date()
     });
   }
 
+  setEndTime(state) {
+    let start = this.state.startTime2;
+    let minutes = start.getMinutes();
+    let minutesToSet = minutes + 10;
+    let newTime = new Date(start.setMinutes(minutesToSet)).toLocaleTimeString();
+
+    this.setState(state => ({
+      endTime: newTime
+    }));
+  }
+
   render() {
-    return <Text>It is {this.state.date.toLocaleTimeString()}.</Text>;
+    return (
+    <View>
+      <Text style={mainStyles.text}>You started at: { this.state.startTime.toLocaleTimeString() }</Text>
+      <Text style={mainStyles.text}>The time is now: { this.state.currentTime.toLocaleTimeString() }</Text>
+      <Text style={mainStyles.text}>Your end time is: { this.state.endTime } </Text>
+    </View>
+    );
   }
 }
 
@@ -105,10 +127,10 @@ class TimerScreen extends Component {
         source={require("./assets/img/smoke.png")}
         style={mainStyles.mainView}
       >
-        <Text>Timer Screen</Text>
+        <Text style={mainStyles.text}>Timer Screen</Text>
         <TouchableHighlight title="Play" onPress={() => playBell()}>
           <View>
-            <Text>Play sound</Text>
+            <Text style={mainStyles.text}>Play sound</Text>
             <Clock />
           </View>
         </TouchableHighlight>
@@ -128,8 +150,11 @@ const mainStyles = StyleSheet.create({
     justifyContent: "space-around",
     width: "85%",
     height: "85%",
-    backgroundColor: "rgba(160, 160, 160, 0.85)",
+    backgroundColor: "rgba(40, 40, 40, 0.85)",
     borderRadius: 5
+  }, 
+  text: {
+    color: "#efefef"
   }
 });
 

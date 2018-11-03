@@ -73,6 +73,31 @@ class welcomeScreen extends Component {
   }
 }
 
+class Clock extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { date: new Date() };
+  }
+
+  componentDidMount() {
+    this.timerID = setInterval(() => this.tick(), 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+
+  tick() {
+    this.setState({
+      date: new Date()
+    });
+  }
+
+  render() {
+    return <Text>It is {this.state.date.toLocaleTimeString()}.</Text>;
+  }
+}
+
 class TimerScreen extends Component {
   render() {
     return (
@@ -84,6 +109,7 @@ class TimerScreen extends Component {
         <TouchableHighlight title="Play" onPress={() => playBell()}>
           <View>
             <Text>Play sound</Text>
+            <Clock />
           </View>
         </TouchableHighlight>
       </ImageBackground>

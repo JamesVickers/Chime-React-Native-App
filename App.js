@@ -76,11 +76,16 @@ class welcomeScreen extends Component {
 class Clock extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { date: new Date() };
+    this.state = {
+      startTime: new Date(),
+      startTime2: new Date(),
+      currentTime: new Date()
+    };
   }
 
   componentDidMount() {
     this.timerID = setInterval(() => this.tick(), 1000);
+    this.setEndTime();
   }
 
   componentWillUnmount() {
@@ -89,12 +94,37 @@ class Clock extends React.Component {
 
   tick() {
     this.setState({
-      date: new Date()
+      currentTime: new Date()
     });
   }
 
+  setEndTime(state) {
+    let starttime = this.state.startTime2;
+    let minutes = starttime.getMinutes();
+    let minutesToSet = minutes + 10;
+    let newTime = new Date(
+      starttime.setMinutes(minutesToSet)
+    ).toLocaleTimeString();
+
+    this.setState(state => ({
+      endTime: newTime
+    }));
+  }
+
   render() {
-    return <Text>It is {this.state.date.toLocaleTimeString()}.</Text>;
+    return (
+      <View>
+        <Text>Start Time: {this.state.startTime.toLocaleTimeString()}.</Text>
+        <Text>
+          Current Time:
+          {this.state.currentTime.toLocaleTimeString()}.
+        </Text>
+        <Text>
+          End Time:
+          {this.state.endTime}.
+        </Text>
+      </View>
+    );
   }
 }
 

@@ -78,8 +78,8 @@ class Clock extends React.Component {
     super(props);
     this.state = { 
       startTime: new Date(),
-      startTime2: new Date(),
-      currentTime: new Date()
+      currentTime: new Date(),
+      input: 20
     };
   }
 
@@ -97,22 +97,25 @@ class Clock extends React.Component {
       currentTime: new Date()
     });
   }
-
+  
   setEndTime(state) {
-    let start = this.state.startTime2;
-    let minutes = start.getMinutes();
+    let clonedStart = { ...this.state }.startTime;
+    let minutes = new Date(clonedStart).getMinutes();
+
     let minutesToSet = minutes + 10;
-    let newTime = new Date(start.setMinutes(minutesToSet)).toLocaleTimeString();
+    let end = clonedStart.setMinutes(minutesToSet);
+    let blah = new Date(end);
+    let time = blah.toLocaleTimeString();
 
     this.setState(state => ({
-      endTime: newTime
+      endTime: time
     }));
   }
 
   render() {
     return (
     <View>
-      <Text style={mainStyles.text}>You started at: { this.state.startTime.toLocaleTimeString() }</Text>
+      <Text style={mainStyles.text}>You started at: { this.state.startTime.toLocaleTimeString() } </Text>
       <Text style={mainStyles.text}>The time is now: { this.state.currentTime.toLocaleTimeString() }</Text>
       <Text style={mainStyles.text}>Your end time is: { this.state.endTime } </Text>
     </View>
@@ -154,7 +157,7 @@ const mainStyles = StyleSheet.create({
     borderRadius: 5
   }, 
   text: {
-    color: "#efefef"
+    color: "#e8e8e8"
   }
 });
 

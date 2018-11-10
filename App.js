@@ -4,9 +4,12 @@ import {
   View,
   Text,
   StyleSheet,
-  ImageBackground
+  ImageBackground,
+  TouchableOpacity
 } from "react-native";
 import { createStackNavigator } from "react-navigation";
+import DateTimePicker from 'react-native-modal-datetime-picker';
+import moment from 'moment';
 
 //must type react-native link react-native-sound in command line
 var Sound = require("react-native-sound");
@@ -27,6 +30,46 @@ function playBell() {
       console.log("playback failed due to audio decoding errors");
     }
   });
+}
+
+class TimePickerTester extends Component {
+  constructor(props) {
+    super(props);
+      this.state = {
+      isTimePickerVisible: false,
+      chosenTime: ''
+     };
+  }
+
+    showPicker = () => this.setState({ isTimePickerVisible: true });
+
+    hidePicker = () => this.setState({ isTimePickerVisible: false });
+      
+    handleTimePicked = (time) => { this.handleInputValue(time) };  
+
+    handleInputValue = (x) => { this.setState({ 
+      isTimePickerVisible: false,
+      chosenTime: moment(x).format('HH:mm:ss').toString()
+      })
+    }  
+    
+    render() {
+      return (
+        
+        <View>
+          <Text style={{ color: 'red' }}>{ this.state.chosenTime }</Text>
+          <TouchableOpacity onPress={this.showPicker} style={mainStyles.picker}>
+            <Text>Show Time Picker</Text>
+          </TouchableOpacity>
+          <DateTimePicker
+                    isVisible={this.state.isTimePickerVisible}
+                    onConfirm={this.handleTimePicked}
+                    onCancel={this.hidePicker}
+                    mode={'time'}
+          />
+      </View>
+      );
+    }
 }
 
 class HomeScreen extends Component {
@@ -73,19 +116,17 @@ class welcomeScreen extends Component {
   }
 }
 
-class Clock extends React.Component {
+class Clock extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      startTime: new Date(),
-      currentTime: new Date(),
-      input: 20
+      currentTime: new Date()
     };
   }
 
   componentDidMount() {
     this.timerID = setInterval(() => this.tick(), 1000);
-    this.setEndTime();
+    //this.setEndTime();
   }
 
   componentWillUnmount() {
@@ -93,31 +134,19 @@ class Clock extends React.Component {
   }
 
   tick() {
+    //console.log(typeof this.state.chosenTime);
+    if (this.state.currentTime.toLocaleTimeString() == this.state.chosenTime) {
+      playBell();
+    }
     this.setState({
       currentTime: new Date()
     });
-  }
-  
-  setEndTime(state) {
-    let clonedStart = { ...this.state }.startTime;
-    let minutes = new Date(clonedStart).getMinutes();
-
-    let minutesToSet = minutes + 10;
-    let end = clonedStart.setMinutes(minutesToSet);
-    let blah = new Date(end);
-    let time = blah.toLocaleTimeString();
-
-    this.setState(state => ({
-      endTime: time
-    }));
   }
 
   render() {
     return (
     <View>
-      <Text style={mainStyles.text}>You started at: { this.state.startTime.toLocaleTimeString() } </Text>
       <Text style={mainStyles.text}>The time is now: { this.state.currentTime.toLocaleTimeString() }</Text>
-      <Text style={mainStyles.text}>Your end time is: { this.state.endTime } </Text>
     </View>
     );
   }
@@ -133,8 +162,11 @@ class TimerScreen extends Component {
         <Text style={mainStyles.text}>Timer Screen</Text>
         <TouchableHighlight title="Play" onPress={() => playBell()}>
           <View>
-            <Text style={mainStyles.text}>Play sound</Text>
             <Clock />
+
+            <TimePickerTester />
+         
+            <Text style={mainStyles.text}>Play sound</Text>
           </View>
         </TouchableHighlight>
       </ImageBackground>
@@ -158,6 +190,10 @@ const mainStyles = StyleSheet.create({
   }, 
   text: {
     color: "#e8e8e8"
+  },
+  picker: {
+    backgroundColor: 'green',
+    color: 'yellow'
   }
 });
 

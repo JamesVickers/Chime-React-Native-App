@@ -32,46 +32,6 @@ function playBell() {
   });
 }
 
-class TimePickerTester extends Component {
-  constructor(props) {
-    super(props);
-      this.state = {
-      isTimePickerVisible: false,
-      chosenTime: ''
-     };
-  }
-
-    showPicker = () => this.setState({ isTimePickerVisible: true });
-
-    hidePicker = () => this.setState({ isTimePickerVisible: false });
-      
-    handleTimePicked = (time) => { this.handleInputValue(time) };  
-
-    handleInputValue = (x) => { this.setState({ 
-      isTimePickerVisible: false,
-      chosenTime: moment(x).format('HH:mm:ss').toString()
-      })
-    }  
-    
-    render() {
-      return (
-        
-        <View>
-          <Text style={{ color: 'red' }}>{ this.state.chosenTime }</Text>
-          <TouchableOpacity onPress={this.showPicker} style={mainStyles.picker}>
-            <Text>Show Time Picker</Text>
-          </TouchableOpacity>
-          <DateTimePicker
-                    isVisible={this.state.isTimePickerVisible}
-                    onConfirm={this.handleTimePicked}
-                    onCancel={this.hidePicker}
-                    mode={'time'}
-          />
-      </View>
-      );
-    }
-}
-
 class HomeScreen extends Component {
   render() {
     return (
@@ -120,7 +80,9 @@ class Clock extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      currentTime: new Date()
+      currentTime: new Date(),
+      isTimePickerVisible: false,
+      chosenTime: ''
     };
   }
 
@@ -134,7 +96,6 @@ class Clock extends Component {
   }
 
   tick() {
-    //console.log(typeof this.state.chosenTime);
     if (this.state.currentTime.toLocaleTimeString() == this.state.chosenTime) {
       playBell();
     }
@@ -143,16 +104,39 @@ class Clock extends Component {
     });
   }
 
+  showPicker = () => this.setState({ isTimePickerVisible: true });
+
+  hidePicker = () => this.setState({ isTimePickerVisible: false });
+     
+  handleTimePicked = (time) => { this.handleInputValue(time) };  
+
+  handleInputValue = (x) => { this.setState({ 
+    isTimePickerVisible: false,
+    chosenTime: moment(x).format('HH:mm:ss').toString()
+    });
+  }
+
   render() {
     return (
     <View>
       <Text style={mainStyles.text}>The time is now: { this.state.currentTime.toLocaleTimeString() }</Text>
-    </View>
+        <Text style={{ color: 'red' }}>{ this.state.chosenTime }</Text>
+        <TouchableOpacity onPress={this.showPicker} style={mainStyles.picker}>
+          <Text>Show Time Picker</Text>
+        </TouchableOpacity>
+        <DateTimePicker
+                  isVisible={this.state.isTimePickerVisible}
+                  onConfirm={this.handleTimePicked}
+                  onCancel={this.hidePicker}
+                  mode={'time'}
+        />
+   </View>
     );
   }
 }
 
 class TimerScreen extends Component {
+  
   render() {
     return (
       <ImageBackground
@@ -162,10 +146,9 @@ class TimerScreen extends Component {
         <Text style={mainStyles.text}>Timer Screen</Text>
         <TouchableHighlight title="Play" onPress={() => playBell()}>
           <View>
+
             <Clock />
 
-            <TimePickerTester />
-         
             <Text style={mainStyles.text}>Play sound</Text>
           </View>
         </TouchableHighlight>

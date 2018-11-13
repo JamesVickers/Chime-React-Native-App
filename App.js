@@ -7,6 +7,7 @@ import {
   ImageBackground,
   TouchableOpacity
 } from "react-native";
+import { Button } from 'react-native-elements';
 import { createStackNavigator } from "react-navigation";
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import moment from 'moment';
@@ -144,14 +145,10 @@ class TimerScreen extends Component {
         style={mainStyles.mainView}
       >
         <Text style={mainStyles.text}>Timer Screen</Text>
-        <TouchableHighlight title="Play" onPress={() => playBell()}>
-          <View>
-
+        <Button title='TestSound1' onPress={() => playBell()}></Button>
+        <View>
             <Clock />
-
-            <Text style={mainStyles.text}>Play sound</Text>
-          </View>
-        </TouchableHighlight>
+        </View>
       </ImageBackground>
     );
   }

@@ -7,31 +7,10 @@ import {
   ImageBackground,
   TouchableOpacity
 } from "react-native";
-import { Button } from 'react-native-elements';
+import { Button } from "react-native-elements";
 import { createStackNavigator } from "react-navigation";
-import DateTimePicker from 'react-native-modal-datetime-picker';
-import moment from 'moment';
-
-//must type react-native link react-native-sound in command line
-var Sound = require("react-native-sound");
-Sound.setCategory("Playback");
-var bell = new Sound("bell.wav", Sound.MAIN_BUNDLE, error => {
-  if (error) {
-    console.log("failed to load the sound", error);
-  } else {
-    console.log("duration in seconds: " + bell.getDuration());
-  }
-});
-
-function playBell() {
-  bell.play(success => {
-    if (success) {
-      console.log("successfully finished playing");
-    } else {
-      console.log("playback failed due to audio decoding errors");
-    }
-  });
-}
+import DateTimePicker from "react-native-modal-datetime-picker";
+import moment from "moment";
 
 class HomeScreen extends Component {
   render() {
@@ -80,10 +59,10 @@ class welcomeScreen extends Component {
 class Clock extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       currentTime: new Date(),
       isTimePickerVisible: false,
-      chosenTime: ''
+      chosenTime: ""
     };
   }
 
@@ -98,7 +77,7 @@ class Clock extends Component {
 
   tick() {
     if (this.state.currentTime.toLocaleTimeString() == this.state.chosenTime) {
-      playBell();
+      this.props.bellInClock;
     }
     this.setState({
       currentTime: new Date()
@@ -108,46 +87,79 @@ class Clock extends Component {
   showPicker = () => this.setState({ isTimePickerVisible: true });
 
   hidePicker = () => this.setState({ isTimePickerVisible: false });
-     
-  handleTimePicked = (time) => { this.handleInputValue(time) };  
 
-  handleInputValue = (x) => { this.setState({ 
-    isTimePickerVisible: false,
-    chosenTime: moment(x).format('HH:mm:ss').toString()
+  handleTimePicked = time => {
+    this.handleInputValue(time);
+  };
+
+  handleInputValue = x => {
+    this.setState({
+      isTimePickerVisible: false,
+      chosenTime: moment(x)
+        .format("HH:mm:ss")
+        .toString()
     });
-  }
+  };
 
   render() {
     return (
-    <View>
-      <Text style={mainStyles.text}>The time is now: { this.state.currentTime.toLocaleTimeString() }</Text>
-        <Text style={{ color: 'red' }}>{ this.state.chosenTime }</Text>
+      <View>
+        <Text style={mainStyles.text}>
+          The time is now: {this.state.currentTime.toLocaleTimeString()}
+        </Text>
+        <Text style={{ color: "red" }}>{this.state.chosenTime}</Text>
         <TouchableOpacity onPress={this.showPicker} style={mainStyles.picker}>
           <Text>Show Time Picker</Text>
         </TouchableOpacity>
         <DateTimePicker
-                  isVisible={this.state.isTimePickerVisible}
-                  onConfirm={this.handleTimePicked}
-                  onCancel={this.hidePicker}
-                  mode={'time'}
+          isVisible={this.state.isTimePickerVisible}
+          onConfirm={this.handleTimePicked}
+          onCancel={this.hidePicker}
+          mode={"time"}
         />
-   </View>
+      </View>
     );
   }
 }
 
 class TimerScreen extends Component {
-  
+  constructor(props) {
+    super(props);
+    this.playBell = this.playBell.bind(this);
+  }
+
+  //must type react-native link react-native-sound in command line
+  playBell() {
+    let Sound = require("react-native-sound");
+    Sound.setCategory("Playback");
+    let bell = new Sound("bell.wav", Sound.MAIN_BUNDLE, error => {
+      if (error) {
+        console.log("failed to load the sound", error);
+      } else {
+        console.log("duration in seconds: " + bell.getDuration());
+      }
+    });
+    bell.play(success => {
+      if (success) {
+        console.log("successfully finished playing");
+      } else {
+        console.log("playback failed due to audio decoding errors");
+      }
+    });
+  }
+
   render() {
+    let usePlayBell = this.playBell;
+
     return (
       <ImageBackground
         source={require("./assets/img/smoke.png")}
         style={mainStyles.mainView}
       >
         <Text style={mainStyles.text}>Timer Screen</Text>
-        <Button title='TestSound1' onPress={() => playBell()}></Button>
+        <Button title="TestSound1" onPress={this.playBell} />
         <View>
-            <Clock />
+          <Clock bellInClock={usePlayBell} />
         </View>
       </ImageBackground>
     );
@@ -167,13 +179,13 @@ const mainStyles = StyleSheet.create({
     height: "85%",
     backgroundColor: "rgba(40, 40, 40, 0.85)",
     borderRadius: 5
-  }, 
+  },
   text: {
     color: "#e8e8e8"
   },
   picker: {
-    backgroundColor: 'green',
-    color: 'yellow'
+    backgroundColor: "green",
+    color: "yellow"
   }
 });
 

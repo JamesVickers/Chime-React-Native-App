@@ -22,6 +22,7 @@ class HomeScreen extends Component {
       >
         <Text style={mainStyles.text}>Chime</Text>
         <TouchableHighlight
+          style={mainStyles.enter}
           title="Enter"
           onPress={() => this.props.navigation.navigate("Details")}
         >
@@ -111,7 +112,7 @@ class Clock extends Component {
         </Text>
         <Text style={{ color: "red" }}>{this.state.chosenTime}</Text>
         <TouchableOpacity onPress={this.showPicker} style={mainStyles.picker}>
-          <Text>Show Time Picker</Text>
+          <Text>Choose End Time</Text>
         </TouchableOpacity>
         <DateTimePicker
           isVisible={this.state.isTimePickerVisible}
@@ -155,9 +156,10 @@ class TimerScreen extends Component {
     });
   };
 
-  /*usePlayBell = () => {
-    this.playBell;
-  };*/
+  setTime() {
+    let timeChosen = this.title; //not logging
+    console.log("clicked");
+  }
 
   render() {
     return (
@@ -166,7 +168,12 @@ class TimerScreen extends Component {
         style={mainStyles.mainView}
       >
         <Text style={mainStyles.text}>Timer Screen</Text>
-        <Button title="TestSound1" onPress={this.playBell} />
+        <Button title="Bell 1" onPress={this.playBell} />
+        <Button title="Bell 2" onPress={this.playBell} />
+        <Button title="Bell 3" onPress={this.playBell} />
+        <Button title="10" onPress={e => this.setTime(e)} />
+        <Button title="20" onPress={e => this.setTime(e)} />
+        <Button title="30" onPress={e => this.setTime(e)} />
         <Clock bellInClock={this.playBell} />
       </ImageBackground>
     );
@@ -187,12 +194,15 @@ const mainStyles = StyleSheet.create({
     backgroundColor: "rgba(40, 40, 40, 0.85)",
     borderRadius: 5
   },
+  enter: {
+    backgroundColor: "#ffffff"
+  },
   text: {
     color: "#e8e8e8"
   },
   picker: {
-    backgroundColor: "green",
-    color: "yellow"
+    backgroundColor: "#480782",
+    color: "#ffffff"
   }
 });
 

@@ -11,6 +11,7 @@ import { Button } from "react-native-elements";
 import { createStackNavigator } from "react-navigation";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import moment from "moment";
+import PropTypes from 'prop-types';
 
 class HomeScreen extends Component {
   render() {
@@ -122,14 +123,19 @@ class Clock extends Component {
   }
 }
 
-class TimerScreen extends Component {
+Clock.propTypes = {
+  bellInClock: React.PropTypes.func
+  };
+
+class TimerScreen extends Component 
   constructor(props) {
     super(props);
-    this.playBell = this.playBell.bind(this);
+   // this.playBell = this.playBell.bind(this);
   }
 
   //must type react-native link react-native-sound in command line
-  playBell() {
+
+  playBell = () => {
     let Sound = require("react-native-sound");
     Sound.setCategory("Playback");
     let bell = new Sound("bell.wav", Sound.MAIN_BUNDLE, error => {
@@ -137,19 +143,19 @@ class TimerScreen extends Component {
         console.log("failed to load the sound", error);
       } else {
         console.log("duration in seconds: " + bell.getDuration());
-      }
-    });
-    bell.play(success => {
-      if (success) {
-        console.log("successfully finished playing");
-      } else {
-        console.log("playback failed due to audio decoding errors");
+        bell.play(success => {
+          if (success) {
+            console.log("successfully finished playing");
+          } else {
+            console.log("playback failed due to audio decoding errors");
+          }
+        });
       }
     });
   }
 
   render() {
-    let usePlayBell = this.playBell;
+    //let usePlayBell = this.playBell;
 
     return (
       <ImageBackground
@@ -159,7 +165,7 @@ class TimerScreen extends Component {
         <Text style={mainStyles.text}>Timer Screen</Text>
         <Button title="TestSound1" onPress={this.playBell} />
         <View>
-          <Clock bellInClock={usePlayBell} />
+          <Clock bellInClock={this.playBell} />
         </View>
       </ImageBackground>
     );

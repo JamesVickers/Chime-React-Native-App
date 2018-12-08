@@ -11,7 +11,7 @@ import { Button } from "react-native-elements";
 import { createStackNavigator } from "react-navigation";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import moment from "moment";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 class HomeScreen extends Component {
   render() {
@@ -67,6 +67,16 @@ class Clock extends Component {
     };
   }
 
+  tick() {
+    if (this.state.currentTime.toLocaleTimeString() == this.state.chosenTime) {
+      this.props.bellInClock(); //add parenteses to end of bellinclock to make it work
+      console.log("time matches set time");
+    }
+    this.setState({
+      currentTime: new Date()
+    });
+  }
+
   componentDidMount() {
     this.timerID = setInterval(() => this.tick(), 1000);
     //this.setEndTime();
@@ -74,15 +84,6 @@ class Clock extends Component {
 
   componentWillUnmount() {
     clearInterval(this.timerID);
-  }
-
-  tick() {
-    if (this.state.currentTime.toLocaleTimeString() == this.state.chosenTime) {
-      this.props.bellInClock;
-    }
-    this.setState({
-      currentTime: new Date()
-    });
   }
 
   showPicker = () => this.setState({ isTimePickerVisible: true });
@@ -124,13 +125,13 @@ class Clock extends Component {
 }
 
 Clock.propTypes = {
-  bellInClock: React.PropTypes.func
-  };
+  bellInClock: PropTypes.func
+};
 
-class TimerScreen extends Component 
+class TimerScreen extends Component {
   constructor(props) {
     super(props);
-   // this.playBell = this.playBell.bind(this);
+    // this.playBell = this.playBell.bind(this);
   }
 
   //must type react-native link react-native-sound in command line
@@ -152,11 +153,13 @@ class TimerScreen extends Component
         });
       }
     });
-  }
+  };
+
+  /*usePlayBell = () => {
+    this.playBell;
+  };*/
 
   render() {
-    //let usePlayBell = this.playBell;
-
     return (
       <ImageBackground
         source={require("./assets/img/smoke.png")}
@@ -164,9 +167,7 @@ class TimerScreen extends Component
       >
         <Text style={mainStyles.text}>Timer Screen</Text>
         <Button title="TestSound1" onPress={this.playBell} />
-        <View>
-          <Clock bellInClock={this.playBell} />
-        </View>
+        <Clock bellInClock={this.playBell} />
       </ImageBackground>
     );
   }

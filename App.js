@@ -131,15 +131,23 @@ Clock.propTypes = {
 class TimerScreen extends Component {
   constructor(props) {
     super(props);
-    // this.playBell = this.playBell.bind(this);
+    this.state = {
+      sound: ""
+    };
   }
-
+ 
   //must type react-native link react-native-sound in command line
 
-  playBell = () => {
+  playBell = (event) => {
+    if(event) {
+      console.log(this.title);
+      this.setState({
+        sound: this.title
+      });
+     }    
     let Sound = require("react-native-sound");
     Sound.setCategory("Playback");
-    let bell = new Sound("bell.wav", Sound.MAIN_BUNDLE, error => {
+    let bell = new Sound(`${this.state.sound}.wav`, Sound.MAIN_BUNDLE, error => {
       if (error) {
         console.log("failed to load the sound", error);
       } else {
@@ -155,10 +163,6 @@ class TimerScreen extends Component {
     });
   };
 
-  /*usePlayBell = () => {
-    this.playBell;
-  };*/
-
   render() {
     return (
       <ImageBackground
@@ -166,7 +170,9 @@ class TimerScreen extends Component {
         style={mainStyles.mainView}
       >
         <Text style={mainStyles.text}>Timer Screen</Text>
-        <Button title="TestSound1" onPress={this.playBell} />
+        <Button title="bell1" onPress={e => this.playBell}/>
+        <Button title="bell2" onPress={this.playBell} />
+        <Button title="bell3" onPress={this.playBell} />
         <Clock bellInClock={this.playBell} />
       </ImageBackground>
     );

@@ -68,13 +68,19 @@ class Clock extends Component {
   }
 
   tick() {
-    if (this.state.currentTime.toLocaleTimeString() == this.state.chosenTime) {
-      this.props.bellInClock(); //add parenteses to end of bellinclock to make it work
-      console.log("time matches set time");
-    }
-    this.setState({
-      currentTime: new Date()
-    });
+    this.setState(
+      {
+        currentTime: new Date()
+      },
+      () => {
+        if (
+          this.state.currentTime.toLocaleTimeString() == this.state.chosenTime
+        ) {
+          this.props.bellInClock(); //add parenteses to end of bellinclock to make it work
+          console.log("time matches set time");
+        }
+      }
+    );
   }
 
   componentDidMount() {
@@ -135,46 +141,48 @@ class TimerScreen extends Component {
       sound: "bell1"
     };
   }
- 
+
   //must type react-native link react-native-sound in command line
 
-  
-
   playBell = () => {
-     
-      console.log(this.state.eventTitle);
+    console.log(this.state.eventTitle);
 
     let Sound = require("react-native-sound");
     Sound.setCategory("Playback");
-    let bell = new Sound(`${this.state.eventTitle}.wav`, Sound.MAIN_BUNDLE, error => {
-      if (error) {
-        console.log("failed to load the sound", error);
-      } else {
-        console.log("duration in seconds: " + bell.getDuration());
-        bell.play(success => {
-          if (success) {
-            console.log("successfully finished playing");
-          } else {
-            console.log("playback failed due to audio decoding errors");
-          }
-        });
+    let bell = new Sound(
+      `${this.state.eventTitle}.wav`,
+      Sound.MAIN_BUNDLE,
+      error => {
+        if (error) {
+          console.log("failed to load the sound", error);
+        } else {
+          console.log("duration in seconds: " + bell.getDuration());
+          bell.play(success => {
+            if (success) {
+              console.log("successfully finished playing");
+            } else {
+              console.log("playback failed due to audio decoding errors");
+            }
+          });
+        }
       }
-    });
+    );
   };
 
-  
-  setBell = (x) => {
-    this.setState({
-      eventTitle: x
-    });
-    this.playBell()
-  }
+  setBell = x => {
+    this.setState(
+      {
+        eventTitle: x
+      },
+      () => {
+        this.playBell();
+      }
+    );
+  };
 
-  /*
-  componentDidMount() {
-    playBell();
-  }
-  */
+  /*componentDidMount() {
+    this.playBell();
+  }*/
 
   render() {
     return (
@@ -183,9 +191,24 @@ class TimerScreen extends Component {
         style={mainStyles.mainView}
       >
         <Text style={mainStyles.text}>Timer Screen</Text>
-        <Button title="bell1" onPress={() => {this.setBell("bell1")}} />
-        <Button title="bell2" onPress={() => {this.setBell("bell2")}} />
-        <Button title="bell3" onPress={() => {this.setBell("bell3")}} />
+        <Button
+          title="bell1"
+          onPress={() => {
+            this.setBell("bell1");
+          }}
+        />
+        <Button
+          title="bell2"
+          onPress={() => {
+            this.setBell("bell2");
+          }}
+        />
+        <Button
+          title="bell3"
+          onPress={() => {
+            this.setBell("bell3");
+          }}
+        />
         <Clock bellInClock={this.playBell} />
       </ImageBackground>
     );

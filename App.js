@@ -192,6 +192,7 @@ class TimerScreen extends Component {
       >
         <Text style={mainStyles.text}>Timer Screen</Text>
         <Button
+          color="red"
           title="bell1"
           onPress={() => {
             this.setBell("bell1");

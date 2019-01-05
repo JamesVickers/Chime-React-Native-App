@@ -13,6 +13,7 @@ import DateTimePicker from "react-native-modal-datetime-picker";
 import moment from "moment";
 import PropTypes from "prop-types";
 
+
 class HomeScreen extends Component {
   render() {
     return (
@@ -34,7 +35,43 @@ class HomeScreen extends Component {
   }
 }
 
+
 class welcomeScreen extends Component {
+
+  playBell = () => {
+    let Sound = require("react-native-sound");
+    Sound.setCategory("Playback");
+    let bell = new Sound(`${this.state.eventTitle}.wav`, Sound.MAIN_BUNDLE, error => {
+      if (error) {
+        console.log("failed to load the sound", error);
+      } else {
+        console.log("duration in seconds: " + bell.getDuration());
+        bell.play(success => {
+          if (success) {
+            console.log("successfully finished playing");
+          } else {
+            console.log("playback failed due to audio decoding errors");
+          }
+        });
+      }
+    });
+  };
+
+// setState(Updater[, callback])
+// setState is asynchronous (fires when it wants!)
+// the 'callback' after the comma is guaranteed to fire after the update has been applied.
+
+  setBell = (x) => {
+    this.setState(
+      {
+        eventTitle: x
+      }, 
+      () => { 
+        this.playBell();
+      }
+    );
+  }
+
   render() {
     return (
       <ImageBackground
@@ -49,6 +86,9 @@ class welcomeScreen extends Component {
           >
             <View>
               <Text style={mainStyles.text}>Click here to begin...</Text>
+              <Button title="bell1" onPress={() => {this.setBell("bell1")}} />
+              <Button title="bell2" onPress={() => {this.setBell("bell2")}} />
+              <Button title="bell3" onPress={() => {this.setBell("bell3")}} />
             </View>
           </TouchableHighlight>
         </View>
@@ -56,6 +96,7 @@ class welcomeScreen extends Component {
     );
   }
 }
+
 
 class Clock extends Component {
   constructor(props) {
@@ -68,13 +109,17 @@ class Clock extends Component {
   }
 
   tick() {
-    if (this.state.currentTime.toLocaleTimeString() == this.state.chosenTime) {
-      this.props.bellInClock(); //add parenteses to end of bellinclock to make it work
-      console.log("time matches set time");
-    }
-    this.setState({
-      currentTime: new Date()
-    });
+    this.setState(
+      {
+        currentTime: new Date()
+      },
+      () => {
+        if (this.state.currentTime.toLocaleTimeString() == this.state.chosenTime) {
+          this.props.bellInClock(); //add parenteses to end of bellinclock to make it work
+          console.log("time matches set time");
+        }
+      }
+    );    
   }
 
   componentDidMount() {
@@ -128,6 +173,7 @@ Clock.propTypes = {
   bellInClock: PropTypes.func
 };
 
+
 class TimerScreen extends Component {
   constructor(props) {
     super(props);
@@ -137,45 +183,7 @@ class TimerScreen extends Component {
   }
  
   //must type react-native link react-native-sound in command line
-
   
-
-  playBell = () => {
-     
-      console.log(this.state.eventTitle);
-
-    let Sound = require("react-native-sound");
-    Sound.setCategory("Playback");
-    let bell = new Sound(`${this.state.eventTitle}.wav`, Sound.MAIN_BUNDLE, error => {
-      if (error) {
-        console.log("failed to load the sound", error);
-      } else {
-        console.log("duration in seconds: " + bell.getDuration());
-        bell.play(success => {
-          if (success) {
-            console.log("successfully finished playing");
-          } else {
-            console.log("playback failed due to audio decoding errors");
-          }
-        });
-      }
-    });
-  };
-
-  
-  setBell = (x) => {
-    this.setState({
-      eventTitle: x
-    });
-    this.playBell()
-  }
-
-  /*
-  componentDidMount() {
-    playBell();
-  }
-  */
-
   render() {
     return (
       <ImageBackground
@@ -183,14 +191,13 @@ class TimerScreen extends Component {
         style={mainStyles.mainView}
       >
         <Text style={mainStyles.text}>Timer Screen</Text>
-        <Button title="bell1" onPress={() => {this.setBell("bell1")}} />
-        <Button title="bell2" onPress={() => {this.setBell("bell2")}} />
-        <Button title="bell3" onPress={() => {this.setBell("bell3")}} />
+
         <Clock bellInClock={this.playBell} />
       </ImageBackground>
     );
   }
 }
+
 
 const mainStyles = StyleSheet.create({
   mainView: {
@@ -207,7 +214,8 @@ const mainStyles = StyleSheet.create({
     borderRadius: 5
   },
   text: {
-    color: "#e8e8e8"
+   // color: "#e8e8e8"
+    color: "orange"
   },
   picker: {
     backgroundColor: "green",
@@ -225,6 +233,7 @@ const RootStack = createStackNavigator(
     initialRouteName: "Home"
   }
 );
+
 
 export default class App extends Component {
   render() {

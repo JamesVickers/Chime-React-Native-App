@@ -38,25 +38,6 @@ class HomeScreen extends Component {
 
 class welcomeScreen extends Component {
 
-  playBell = () => {
-    let Sound = require("react-native-sound");
-    Sound.setCategory("Playback");
-    let bell = new Sound(`${this.state.eventTitle}.wav`, Sound.MAIN_BUNDLE, error => {
-      if (error) {
-        console.log("failed to load the sound", error);
-      } else {
-        console.log("duration in seconds: " + bell.getDuration());
-        bell.play(success => {
-          if (success) {
-            console.log("successfully finished playing");
-          } else {
-            console.log("playback failed due to audio decoding errors");
-          }
-        });
-      }
-    });
-  };
-
 // setState(Updater[, callback])
 // setState is asynchronous (fires when it wants!)
 // the 'callback' after the comma is guaranteed to fire after the update has been applied.
@@ -169,11 +150,6 @@ class Clock extends Component {
   }
 }
 
-Clock.propTypes = {
-  bellInClock: PropTypes.func
-};
-
-
 class TimerScreen extends Component {
   constructor(props) {
     super(props);
@@ -185,6 +161,7 @@ class TimerScreen extends Component {
   //must type react-native link react-native-sound in command line
   
   render() {
+    
     return (
       <ImageBackground
         source={require("./assets/img/smoke.png")}
@@ -192,7 +169,10 @@ class TimerScreen extends Component {
       >
         <Text style={mainStyles.text}>Timer Screen</Text>
 
-        <Clock bellInClock={this.playBell} />
+        <Button title="TestButton" onPress={this.props.screenProps} />
+
+        <Clock bellInClock={this.props.screenProps} />
+  
       </ImageBackground>
     );
   }
@@ -236,7 +216,40 @@ const RootStack = createStackNavigator(
 
 
 export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      eventTitle: "bell1"
+    }
+  }
+  
+  playBell = () => {
+    let Sound = require("react-native-sound");
+    Sound.setCategory("Playback");
+    let bell = new Sound(`${this.state.eventTitle}.wav`, Sound.MAIN_BUNDLE, error => {
+      if (error) {
+        console.log("failed to load the sound", error);
+      } else {
+        console.log("duration in seconds: " + bell.getDuration());
+        bell.play(success => {
+          if (success) {
+            console.log("successfully finished playing");
+          } else {
+            console.log("playback failed due to audio decoding errors");
+          }
+        });
+      }
+    });
+  };
+
+  logFunction = () => {
+    console.log("Hellowwwwww!");
+  }
+
   render() {
-    return <RootStack />;
+    // screenProps is a signigficant word and sends props through the navigation. Do not rename.
+    return <RootStack screenProps={this.playBell}/>;
   }
 }
+
+// https://reactnavigation.org/docs/en/params.html
